@@ -5,7 +5,7 @@
 // @include     http://e-hentai.org/g/*
 // @include     https://e-hentai.org/g/*
 // @include     https://exhentai.org/g/*
-// @version     0.1
+// @version     0.2
 // @grant       none
 // ==/UserScript==
 /*
@@ -156,20 +156,20 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:lolicon', 'lolicon', 'm:shotacon', 'shotacon'
 , 'f:low lolicon', 'low lolicon', 'm:low shotacon', 'low shotacon'
 , 'f:old lady', 'gilf', 'm:old man', 'old man'
-, 'f:toddlercon', 'toddler', 'm:toddlercon', 'mtoddler'
+, 'f:toddlercon', 'm:toddlercon'
 // body
-, 'f:amputee', 'famp', 'm:amputee', 'mamp'
-, 'f:body modification', 'bodymod', 'm:body modification'  // old
-, 'f:conjoined', 'conjoin', 'm:conjoined'  // old
-, 'f:doll joints', 'fdj', 'm:doll joints'  // no male synonym
+, 'f:body modification', 'm:body modification'
+, 'f:conjoined', 'm:conjoined'
+, 'f:doll joints', 'm:doll joints'
 , 'f:gijinka', 'm:gijinka'
+, 'f:haigure'  // no male version yet
 , 'f:inflation', 'inflation', 'm:inflation', 'minflation'
 , 'f:invisible', 'finvis', 'm:invisible', 'minvis'
 , 'f:multiple arms', 'm:multiple arms'
 , 'f:multiple breasts', 'multiboob'
 , 'f:multiple nipples', 'm:multiple nipples'
 , 'f:multiple penises', 'multidick', 'm:multiple penises'
-, 'f:multiple vaginas'
+, 'f:multiple vaginas'  // no male version yet
 , 'f:muscle', 'fmus', 'm:muscle', 'mmus'
 , 'f:muscle growth', 'musclegrowth', 'm:muscle growth'
 , 'f:pregnant', 'fpreg', 'm:pregnant', 'mpreg'
@@ -181,8 +181,8 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:ass expansion', 'm:ass expansion'
 , 'f:balls expansions', 'm:balls expansion', 'ball expansion'
 , 'f:body swap', 'fbodyswap', 'm:body swap', 'mbody swap', 'body swap'
-, 'f:breast expansion', 'fbe'
-, 'f:breast reduction'
+, 'f:breast expansion'  // no male version yet
+, 'f:breast reduction'  // no male version yet
 , 'f:clit growth', 'clit grow'
 , 'f:corruption', 'fcorr', 'm:corruption', 'mcorr'
 , 'f:dick growth', 'm:dick growth'
@@ -193,7 +193,7 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:muscle growth', 'm:muscle growth'
 , 'f:nipple expansion', 'm:nipple expansion'
 , 'f:petrification', 'statue', 'm:petrification'
-, 'f:shrinking', 'm:shrinking'  // mleotard!
+, 'f:shrinking', 'm:shrinking'
 , 'f:transformation', 'ftrans', 'm:transformation', 'mtrans'
 , 'f:weight gain', 'm:weight gain'
 // creature/costume
@@ -236,6 +236,7 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:snake girl', 'm:snake boy'
 , 'f:spider girl', 'spidergirl'
 , 'f:squid girl', 'squidgirl'
+, 'f:vampire', 'm:vampie'
 , 'f:wolf girl', 'wolfgirl', 'm:wolf boy', 'wolfboy'
 , 'yukkuri'  // must be tagged always in misc?
 , 'f:zombie', 'm:zombie'
@@ -298,11 +299,11 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:tall girl', 'ftall', 'm:tall man', 'mtall'
 // skin
 , 'f:albino', 'm:albino'
-, 'f:body writing', 'fbw', 'm:body writing', 'mbw'
+, 'f:body writing', 'm:body writing'
 , 'f:body painting', 'fbodypaint', 'm:body painting', 'mbodypaint'
-, 'f:crotch tattoo', 'm:crotch tattoo'
+, 'f:crotch tattoo'  // no male version yet
 , 'f:dark skin', 'fds', 'm:dark skin', 'mds'
-, 'f:freckles', 'ffreck', 'm:freckles', 'mfreck'
+, 'f:freckles', 'ffreckle', 'm:freckles', 'mfreckle'
 , 'f:full body tattoo', 'ftattoo', 'm:full body tattoo', 'mtattoo'
 , 'f:oil', 'foil', 'm:oil', 'moil'
 , 'f:scar', 'fscar', 'm:scar', 'mscar'
@@ -310,8 +311,8 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:sweating', 'fsweat', 'm:sweating', 'msweat'
 , 'f:tanlines', 'ftanlines', 'm:tanlines', 'mtanlines'
 // weight
-, 'f:anorexic'  // no male version
-, 'f:bbw', 'bbw', 'm:bbm', 'bbm'  // probably works
+, 'f:anorexic'  // no male version yet
+, 'f:bbw', 'bbw', 'm:bbm', 'bbm'
 , 'f:weight gain', 'm:weight gain'
 // head
 , 'f:ahegao', 'fahegao', 'm:ahegao', 'mahegao'
@@ -319,7 +320,6 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:cockslapping'  // no male version yet
 , 'f:ear fuck'  // no male version yet
 , 'f:facesitting', 'm:facesitting'
-, 'f:gasmask', 'fgas', 'm:gasmask', 'mgas'  // wiki update
 , 'f:hairjob', 'm:hairjob'
 , 'f:masked face', 'fmask', 'm:masked face', 'mmask'
 , 'f:prehensile hair'  // no male version yet
@@ -327,17 +327,374 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:body swap', 'fbodyswap', 'm:body swap', 'mbodyswap', 'body swap'
 , 'f:chloroform', 'fchloro', 'm:chloroform', 'mchloro'
 , 'f:corruption', 'fcorr', 'm:corruption', 'mcorr'
-, 'f:drugs', 'm:drugs'  // wrong wiki group
+, 'f:drugs', 'm:drugs'
 , 'f:drunk', 'fdrunk', 'm:drunk', 'mdrunk'
 , 'f:emotionless sex', 'femotion', 'm:emotionless sex', 'memotion'
+, 'f:mind break', 'm:mind break'
+, 'f:mind control', 'm:mind control'
+, 'f:parasite', 'm:parasite'
+, 'f:possession', 'fposs', 'm:possession', 'mposs'
+, 'f:shared senses', 'fsharedsense', 'm:shared senses', 'msharedsense'
+, 'f:sleeping', 'fsleep', 'm:sleeping', 'msleeep'
+// eyes
+, 'f:blindfold', 'm:blindfold'
+, 'f:dark sclera', 'm:dark sclera'
+, 'f:eye penetration', 'feyefuck', 'm:eye penetration'  // missing meyefuck
+, 'f:first person perspective', 'm:first person perspective'
+, 'f:heterochromia', 'm:heterochromia'
+, 'f:unusual pupils', 'm:unusual pupils'
+// nose
+, 'f:nose fuck', 'm:nose fuck'
+, 'f:nose hook', 'm:nose hook'
+// mouth
+, 'f:ball sucking', 'fballsucking', 'm:ball sucking', 'mballsucking'
+, 'f:big lips'  // no male version yet
+, 'f:blowjob', 'm:blowjob'
+, 'f:blowjob face', 'm:blowjob face'
+, 'f:braces'  // no male version yet
+, 'f:burping', 'fburp', 'm:burping', 'mburp'
+, 'f:coprophagia', 'm:coprophagia'
+, 'f:cunnilingus'  // no male version yet
+, 'f:deepthroat', 'fdeep', 'm:deepthroat', 'mdeep'
+, 'f:double blowjob', 'm:double blowjob'
+, 'f:foot licking', 'm:foot licking'
+, 'f:gag', 'fgag', 'm:gag', 'mgag'
+, 'f:gokkun', 'fgokkun', 'm:gokkun', 'mgokkun'
+, 'f:kissing', 'fkiss', 'm:kissing', 'mkiss'
+, 'f:long tongue', 'flongt', 'm:long tongue', 'mlongt'
+, 'f:piss drinking', 'm:piss dringking'
+, 'f:rimjob', 'frimjob', 'm:rimjob', 'mrimjob'
+, 'f:saliva', 'm:saliva'
+, 'f:smoking', 'fsmoke', 'm:smoking', 'msmoke'
+, 'f:tooth brushing', 'ftooth', 'm:tooth brushing', 'mtooth'
+, 'f:unusual teeth', 'm:unusual teeth'
+, 'f:vomit', 'fvomit', 'm:vomit', 'mvomit'
+, 'f:vore', 'fvore', 'm:vore', 'mvore'
+// neck
+, 'f:asphyxiation', 'fstrangle', 'm:asphyxiation', 'mstrangle'
+// arms
+, 'f:armpit licking', 'm:armpit licking'
+, 'f:armpit sex', 'm:armpit sex'
+, 'f:fingering'  // male links to prostate massage
+, 'f:fisting', 'ffist', 'm:fisting', 'mfist'
+, 'f:handjob', 'm:handjob'
+, 'f:hairy armpits', 'm:hairy armpits'
+// breasts
+, 'f:big areolae', 'm:big areolae'
+, 'f:big breasts', 'm:big breasts'
+, 'f:breast feeding', 'fbreastfeed', 'm:breast feeding', 'mbreastfeed'  // wiki only male
+, 'f:huge breasts', 'fhuge breasts'
+, 'f:lactation', 'm:lactation'
+, 'f:milking', 'fmilking'  // male links to handjob
+, 'f:multiple paizuri'  // no male version yet
+, 'f:oppai loli'  // female only
+, 'f:paizuri', 'fpai', 'm:paizuri', 'mpai'  // wiki only female
+, 'f:small breasts', 'small breats'
+// nipples
+, 'f:big nipples', 'fbignipple', 'm:big nipples', 'mbignipple'
+, 'f:dark nipples', 'm:dark nipples'
+, 'f:dicknipples', 'm:dicknipples'
+, 'f:inverted nipples', 'm:inverted nipples'
+, 'f:multiple nipples', 'm:mulitple nipples'
+, 'f:nipple birth', 'fniiplebirth', 'm:nipple birth', 'mnipplebirth'
+, 'f:nipple fuck'  // no male version yet
+// torso
+, 'f:navel fuck', 'm:navel fuck'
+, 'f:stocmach deformation', 'm:stocmach deformation'
+// crotch
+, 'f:condom', 'fcondom', 'm:condom', 'mcondom'
+, 'f:crotch tattoo'  // no male version yet
+, 'f:hairy', 'm:hairy'
+, 'f:pubic stubble', 'm:pubic stubble'
+, 'f:urethra insertion', 'm:urethra insertion'
+// penile
+, 'f:balljob', 'm:balljob'
+, 'f:big balls', 'fbigballs', 'm:big balls', 'mbigballs'
+, 'f:big penis', 'm:big penis'
+, 'f:cbt', 'fcbt', 'm:cbt', 'mcbt'
+, 'm:cuntboy', 'cunt boy'
+, 'f:frottage', 'm:frottage', 'frottage'
+, 'f:futanari', 'futanari'  // female only
+, 'f:horse cock', 'm:horse cock'
+, 'f:huge penis', 'm:huge penis'
+, 'f:penis birth', 'fpenisbirth', 'm:penis birth', 'mpenisbirth'
+, 'f:phimosis', 'fphimosis', 'm:phimosis'  // missing mphimosis
+, 'f:prostate massage', 'm:prostate massage'
+, 'f:shemale', 'shemale'  // female only
+, 'f:smegma', 'fsmegma', 'm:smegma', 'msmegma'
+// vaginal
+, 'f:big clit'  // no male version yet
+, 'f:big vagina'  // no male version yet
+, 'f:birth', 'fbirth', 'm:birth', 'mbirth'
+, 'f:cervix penetration'  // no male version yet
+, 'f:double vaginal'  // no male version yet
+, 'f:squirting', 'squirt'  // no male version yet
+, 'f:tribadism', 'tribbing'  // no male version yet
+, 'f:triple vaginal'  // no male version yet
+// buttocks
+, 'f:anal', 'fanal', 'm:anal', 'manal'
+, 'f:anal birth', 'fanalbirth', 'm:anal birth', 'manalbirth'
+, 'f:assjob', 'm:assjob'
+, 'f:big ass', 'm:big ass'
+, 'f:double anal', 'm:double anal'
+, 'f:enema', 'fenema', 'm:enema', 'menema'
+, 'f:farting', 'ffart', 'm:farting', 'mfart'
+, 'm:pegging'  // male only
+, 'f:spanking', 'fspank', 'm:spanking', 'mspank'
+, 'f:tail plug', 'm:tail plug'
+, 'f:triple anal', 'm:triple anal'
+// either hole
+, 'f:eggs', 'fegg', 'm:eggs', 'megg'
+, 'f:gaping', 'fgape', 'm:gaping', 'mgape'
+, 'f:large insertions', 'm:large insertions'
+, 'f:nakadashi', 'fcreampie', 'm:nakadashi', 'mcreampie'
+, 'f:prolapse', 'fprolapse', 'm:prolapse', 'mprolapse'
+, 'f:unbirth', 'funbirth', 'm:unbirth', 'munbirth'
+// legs
+, 'f:kneepit sex'  // no male version yet
+, 'f:leg lock', 'm:leg lock'
+, 'f:legjob'  // no male version yet
+, 'f:sumata', 'm:sumata'
+// feet
+, 'f:foot insertion', 'm:foot insertion'
+, 'f:footjob', 'm:footjob'
 // costume
+, 'f:apron', 'fapron', 'm:apron', 'mapron'
+, 'f:bandages', 'mbandage', 'm:bandages', 'fbandage'
+, 'f:bandaid'  // no male version yet
+, 'f:bike shorts', 'fspats', 'm:bike shorts', 'mspats'
+, 'f:bikini', 'fbikini', 'm:bikini', 'mbikini'
+, 'f:bloomers', 'fbloomer', 'm:bloomers', 'mbloomer'
+, 'f:bodystocking', 'fbodystocking', 'm:bodystocking', 'mbodystocking'
+, 'f:bodysuit', 'fbodysuit', 'm:bodysuit', 'mbodysuit'
+, 'f:bride', 'm:bride'
+, 'f:business suit', 'm:business suit'
+, 'f:butler', 'fbutler', 'm:butler', 'mbutler'  // wiki only female
+, 'f:cashier', 'facsh', 'm:cashier', 'mcash'
+, 'f:chastity belt', 'fcb', 'm:chastity belt', 'mcb'
+, 'f:cheerleader', 'fcheer', 'm:cheerleader', 'mcheer'
+, 'f:chinese dress', 'm:chinese dress'
+, 'f:christmas', 'fchrist', 'm:christmas', 'mchrist'
+, 'f:collar', 'm:collar'
+, 'f:corset', 'fcorset', 'm:corset', 'mcorset'
+, 'f:cosplaying', 'fcosplay', 'm:cosplaying'  // missing mcosplay
+, 'f:crossdressing', 'fcross', 'm:crossdressing', 'mcross'
+, 'f:diaper', 'm:diaper'
+, 'f:dougi', 'fdougi', 'm:dougi', 'mdougi'
+, 'f:eyemask', 'feyemask', 'm:eyemask', 'meyemask'
+, 'f:eyepatch', 'm:eyepatch'
+, 'f:fundoshi', 'ffund', 'm:fundoshi', 'mfund'
+, 'f:garter belt', 'fgarter', 'm:garter belt', 'mgarter'
+, 'f:gasmask', 'fgas', 'm:gasmask', 'mgas'
+, 'f:glasses', 'fglasses', 'm:glasses', 'mglasses'
+, 'f:gothic lolita', 'm:gothic lolita'
 , 'f:gyaru', 'fkogal', 'm:gyaru-oh', 'mkogal'
-// utilities
-, 'f:pantyhose'
-, 'f:stockings'
-, 'f:schoolgirl uniform', 'm:schoolgirl uniform'
-, 'f:bondage', 'm:bondage'
-, 'f:gag', 'm:gag'
+, 'f:gymshorts', 'fgymshorts', 'm:gymshorts', 'mgymshorts'
+, 'f:hijab'  // no male version yet
+, 'f:hotpants', 'fhotpants', 'm:hotpants', 'mhotpants'
+, 'f:kigurumi', 'm:kigurumi'
+, 'f:kimono', 'fkimono', 'm:kimono', 'mkimono'
+, 'f:kindergarten uniform'  // no male version yet
+, 'f:kunoichi', 'm:kunoichi'
+, 'f:lab coat', 'flab', 'm:lab coat', 'mlab'
+, 'f:latex', 'flatex', 'm:latex', 'mlatex'
+, 'f:leotard', 'fleotard', 'm:leotard', 'mleotard'
+, 'f:lingerie', 'flingerie', 'm:lingerie', 'mlingerie'
+, 'f:living clothes', 'm:living clothes'
+, 'f:magical girl', 'm:magical girl'
+, 'f:maid', 'fmaid', 'm:maid', 'mmaid'
+, 'f:mecha girl', 'm:mecha boy'
+, 'f:metal armor', 'm:metal armor'
+, 'f:miko', 'fmiko', 'm:miko', 'mmiko'
+, 'f:military', 'fmilitary', 'm:military', 'mmilitary'
+, 'f:nazi', 'm:nazi'
+, 'm:ninja'  // female links to kunoichi
+, 'f:nun', 'fnun', 'm:nun', 'mnun'
+, 'f:nurse', 'fnurse', 'm:nurse', 'mnurse'
+, 'f:pantyhose', 'fpantyh', 'm:pantyhose', 'mpantyh'
+, 'f:pantyjob', 'm:pantyjob'
+, 'f:pasties', 'm:pasties'
+, 'f:piercing', 'fpiercing', 'm:piercing', 'mpiercing'
+, 'f:policewoman', 'm:policeman'
+, 'f:ponygirl'  // no male version yet
+, 'f:race queen'  // no male version yet
+, 'f:randoseru', 'frand', 'm:randoseru', 'mrand'
+, 'f:school swimsuit', 'm:school swimsuit'
+, 'f:schoolboy uniform', 'fschoolboy', 'm:schoolboy uniform', 'mschoolboy'
+, 'f:schoolgirl uniform', 'fschoolgirl', 'm:schoolgirl uniform', 'mschoolgirl'
+, 'f:scrotal lingerie', 'm:scrotal lingerie'
+, 'f:shimapan', 'fstriped panties', 'm:shimapan', 'mstriped panties'
+, 'f:stewardess', 'fstewardess', 'm:stewardess', 'mstewardess'
+, 'f:stockings', 'fstockings', 'm:stockings', 'mstockings'
+, 'f:swimsuit', 'fswimsuit', 'm:swimsuit', 'mswimsuit'
+, 'f:sundress', 'fsundress', 'm:sundress', 'msundress'
+, 'f:sunglasses', 'fsunglass', 'm:sunglasses', 'msunglass'
+, 'f:thigh high boots', 'm:thigh high boots'
+, 'f:tiara', 'ftiara', 'm:tiara', 'mtiara'
+, 'f:tights', 'ftights', 'm:tights', 'mtights'
+, 'f:tracksuit', 'm:tracksuit'
+, 'f:vaginal sticker'  // no male version yet
+, 'f:waiter', 'fwaiter', 'm:waiter', 'mwaiter'
+, 'f:waitress', 'fwaitress', 'm:waitress', 'mwaitress'
+, 'f:wet clothes', 'm:wet clothes'
+, 'f:witch', 'fwitch', 'm:witch', 'mwitch'
+// tools
+, 'dakimakura', 'body pillow'  // always in misc
+, 'f:glory hole', 'fglory', 'm:glory hole', 'mglory'
+, 'f:machine', 'fmachine', 'm:machine', 'mmachine'
+, 'f:onahole', 'fonahole', 'm:onahole', 'monahole'
+, 'f:pillory', 'fpillory', 'm:pillory', 'mpillory'
+, 'f:pole dancing', 'fpole', 'm:pole dancing', 'mpole'
+, 'f:real doll'  // no male version yet
+, 'f:sex toys', 'm:sex toys'
+, 'f:speculum', 'fspec', 'm:speculum', 'mspec'
+, 'f:strap-on'  // no male version yet
+, 'f:syringe', 'fsyringe', 'm:syringe', 'msyringe'
+, 'f:tube', 'ftube', 'm:tube'  // missing mtube
+, 'f:vacbed', 'm:vacbed'
+, 'f:whip', 'fwhip', 'm:whip', 'mwhip'
+, 'f:wooden horse', 'fwooden', 'm:wooden horse'  // missing mwooden
+, 'f:wormhole', 'fwormhole', 'm:wormhole', 'mwormhole'
+, 'f:x-ray', 'fxray', 'm:x-ray', 'mxray'
+// fluids
+, 'f:bukkake', 'fbukkake', 'm:bukkake', 'mbukkake'
+, 'f:cum bath'  // no male version yet
+, 'f:cum in eye'  // no male version yet
+, 'f:cum swap'  // no male version yet
+, 'f:menstruation'  // no male version yet
+, 'f:public use', 'm:public use'
+, 'f:scat', 'fscat', 'm:scat', 'mscat'
+, 'f:smell', 'fsmell', 'm:smell', 'msmell'
+, 'f:underwater', 'm:underwater'
+, 'f:urination', 'fpee', 'm:urination', 'mpee'
+// force
+, 'f:bdsm', 'fbsdm', 'm:bdsm', 'mbdsm'
+, 'f:bondage', 'fbondage', 'm:bondage', 'mbondage'
+, 'f:chikan', 'fchikan', 'm:chikan', 'mchikan'
+, 'f:femdom', 'femdom', 'm:josou seme', 'trapdom'
+, 'f:forniphilia', 'fforn', 'm:forniphilia', 'mforn'
+, 'f:humman cattle'  // no male version yet
+, 'f:human pet', 'pergirl', 'm:human pet', 'petgirl'
+, 'f:orgasm denial', 'm:orgasm denial'
+, 'f:rape', 'frape', 'm:rape', 'mrape'
+, 'f:shibari', 'fshibari', 'm:shibari', 'mshibari'
+, 'f:slave', 'fslave', 'm:slave', 'mslave'
+, 'f:stuck in wall', 'fstuck', 'm:stuck in wall', 'mstuck'
+, 'f:tickling', 'ftickle', 'm:tickling'  // missing mtickle
+, 'time stop'  // always in misc
+// violence
+, 'f:abortion', 'fabort', 'm:abortion', 'mabort'
+, 'f:blood', 'fblood', 'm:blood', 'mblood'
+, 'f:cannibalism', 'fcann', 'm:cannibalism', 'mcann'
+, 'f:catfight'  // female only
+, 'f:guro', 'fguro', 'm:guro', 'mguro'
+, 'f:electric shocks', 'm:electric shocks'
+, 'f:ryona', 'ffight', 'm:ryona', 'mfight'
+, 'f:snuff', 'fsnuff', 'm:snuff', 'msnuff'
+, 'f:torture', 'm:torture'
+, 'f:trampling', 'ftramp', 'm:trampling', 'mtramp'
+, 'f:wrestling', 'm:wrestling'
+// self-pleasure
+, 'f:autofellatio', 'm:autofellatio'
+, 'f:autopaizuri'  // no male version yet
+, 'f:masturbation', 'fmast', 'm:masturbation', 'mmast'
+, 'f:phone sex', 'm:phone sex'
+, 'f:selfcest', 'm:selfcest'
+, 'f:solo action', 'fsolo', 'm:solo action', 'msolo'
+, 'f:table masturbation', 'm:table masturbation'
+// disability
+, 'f:amputee', 'famp', 'm:amputee', 'mamp'
+, 'f:blind', 'fblind', 'm:blind'  // missing mblind
+, 'f:handicapped'  // no male version yet
+, 'f:mute'  // no male version yet
+// privacy
+, 'f:exhibitionism', 'm:exhibitionism'
+, 'f:filming', 'ffilm', 'm:filming', 'mfilm'
+, 'f:humiliation', 'fhumiliation', 'm:humiliation', 'mhumiliation'
+, 'f:voyeurism', 'm:voyeurism'
+// group activities
+, 'f:bisexual', 'm:bisexual'
+, 'ffm threesome', 'mff threesome', 'fmf threesome'
+, 'f:fft threesome', 'fft threesome', 'tff threesome', 'ftf threesome'
+, 'f:group', 'fgroup', 'm:group', 'mgroup', 'group'
+, 'f:harem', 'fharem', 'm:harem', 'mharem'
+, 'f:layer cake', 'm:layer cake'
+, 'mmf threesome', 'fmm threesome'
+, 'mmt threesome', 'tmm threesome', 'mtm threesome'
+, 'mtf threesome', 'fmt threesome', 'ftm threesome', 'mft threesome'
+, 'f:ttf threesome', 'ttf threesome', 'ftt threesome', 'tft threesome'
+, 'ttm threesome', 'mtt threesome', 'tmt threesome'
+, 'f:twins', 'ftwins', 'm:twins', 'mtwins', 'twins'
+// multiple holes
+, 'f:all the way through', 'm:all the way through'
+, 'f:double penetration', 'm:double penetration'
+, 'f:triple penetration', 'm:triple penetration'
+// inter-gender
+, 'f:dickgirl on dickgirl', 'dickgirl on dickgirl'
+, 'm:dickgirl on male', 'dickgirl on male'
+, 'f:male on dickgirl', 'male on dickgirl'
+// contextual
+, 'f:blackmail', 'fblackmail', 'm:blackmail', 'mblackmail'
+, 'f:coach', 'fcoach', 'm:coach', 'mcoach'
+, 'f:defloration', 'm:virginity'
+, 'f:females only', 'girls only', 'm:males only', 'guys only'
+, 'f:impregnation', 'fimpreg', 'm:impregnation', 'mimpreg'
+, 'f:oyakodon', 'm:oyakodon', 'oyakodon'
+, 'f:prostitution', 'fprost', 'm:prostitution', 'mprost'
+, 'f:sole dickgirl', 'sole dickgirl'
+, 'f:sole female', 'sole female'
+, 'm:sole male', 'sole male'
+, 'f:teacher', 'fteacher', 'm:teacher', 'mteacher'
+, 'f:tomboy', 'tomboy', 'm:tomgirl', 'tomgirl'
+, 'f:tutor', 'ftutor', 'm:tutor', 'mtutor'
+, 'f:widow', 'm:widower'  // m:widower does not exist!
+, 'f:yandere', 'fyandere', 'm:yandere', 'myandere'
+, 'f:yuri', 'm:yaoi'
+// infidelity
+, 'f:cheating', 'fcheat', 'm:cheating', 'mcheat'
+, 'f:netorare', 'fntr', 'm:netorare', 'mntr'
+, 'f:swinging', 'fswing', 'm:swinging', 'mswing'
+// incest
+, 'f:aunt', 'm:uncle'
+, 'f:cousin', 'fcousin', 'm:cousin', 'mcousin'
+, 'f:daughter', 'm:father'
+, 'f:granddaughter', 'grand daughter'
+, 'f:grandmother', 'grand mother', 'm:grandfather', 'grand father'
+, 'f:incest', 'fincest', 'm:incest', 'mincest', 'incest'
+, 'f:inseki', 'm:inseki', 'inseki'
+, 'f:mother'
+, 'f:niece'
+, 'f:sister', 'm:brother'
+// technical
+, '3d'
+, 'anaglyph'
+, 'animated'
+, 'anthology'
+, 'artbook'
+, 'figure'
+, 'full censorship', 'mosaic censorship', 'uncensored', 'decensored'
+, 'full color', 'coloured'
+, 'game sprite'
+, 'hardcore', 'non-nude'  // cosplay
+, 'how to', 'tutorial'
+, 'multi-work series'
+, 'novel'
+, 'paperchild'
+, 'redraw', 'shopped'
+, 'screenshots'
+, 'stereoscopic'
+, 'story arc'
+, 'tankoubon'
+, 'themeless'
+, 'webtoon'
+// expunge and semi-expunge
+, 'already uploaded', 'compilation', 'replaced'
+, 'forbidden content', 'realporn', 'watermarked'
+, 'incomplete', 'missing cover', 'out of order', 'sample', 'scanmark'
+// TODO
+// examles of tags that can be added: parodies, characters and artists/circles
+, 'p:my little pony friendship is magic'
+, 'p:cardcaptor sakura'
 ];
 
 })();
