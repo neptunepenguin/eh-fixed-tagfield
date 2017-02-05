@@ -166,14 +166,14 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:inflation', 'inflation', 'm:inflation', 'minflation'
 , 'f:invisible', 'finvis', 'm:invisible', 'minvis'
 , 'f:multiple arms', 'm:multiple arms'
-, 'f:multiple breasts', 'multiboob'
+, 'f:multiple breasts', 'multiboob'  // no male version yet
 , 'f:multiple nipples', 'm:multiple nipples'
 , 'f:multiple penises', 'multidick', 'm:multiple penises'
 , 'f:multiple vaginas'  // no male version yet
 , 'f:muscle', 'fmus', 'm:muscle', 'mmus'
-, 'f:muscle growth', 'musclegrowth', 'm:muscle growth'
+, 'f:muscle growth', 'm:muscle growth'
 , 'f:pregnant', 'fpreg', 'm:pregnant', 'mpreg'
-, 'f:stretching', 'fstretch', 'm:stretching'
+, 'f:stretching', 'fstretch', 'm:stretching'  // missing mstretch
 , 'f:tailjob', 'm:tailjob'
 , 'f:wings', 'fwings', 'm:wings', 'mwings'
 // change
@@ -181,17 +181,17 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:ass expansion', 'm:ass expansion'
 , 'f:balls expansions', 'm:balls expansion', 'ball expansion'
 , 'f:body swap', 'fbodyswap', 'm:body swap', 'mbody swap', 'body swap'
-, 'f:breast expansion'  // no male version yet
+, 'f:breast expansion', 'm:breast expansion'
 , 'f:breast reduction'  // no male version yet
-, 'f:clit growth', 'clit grow'
+, 'f:clit growth', 'clit grow'  // no male version yet
 , 'f:corruption', 'fcorr', 'm:corruption', 'mcorr'
 , 'f:dick growth', 'm:dick growth'
-, 'm:feminization', 'feminisation'
+, 'm:feminization', 'feminisation'  // male only
 , 'f:gender bender', 'fgender', 'm:gender bender', 'mgender'
 , 'f:growth', 'fgrowth', 'm:growth', 'mgrowth'
 , 'f:moral degeneration', 'fmoral', 'm:moral degeneration', 'mmoral'
 , 'f:muscle growth', 'm:muscle growth'
-, 'f:nipple expansion', 'm:nipple expansion'
+, 'f:nipple expansion'  // no male verion yet
 , 'f:petrification', 'statue', 'm:petrification'
 , 'f:shrinking', 'm:shrinking'
 , 'f:transformation', 'ftrans', 'm:transformation', 'mtrans'
@@ -213,14 +213,14 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:furry', 'ffurry', 'm:furry', 'm:furry'
 , 'f:ghost', 'fghost', 'm:ghost', 'mghost'
 , 'f:goblin', 'm:goblin'
-, 'f:harpy', 'fharpy', 'm:harpy', 'mharpy'  // wiki only female
+, 'f:harpy', 'fharpy', 'm:harpy', 'mharpy'
 , 'f:horse girl', 'm:horse boy'
 , 'f:human on furry', 'fhof', 'm:human on furry', 'mhof'
 , 'f:insect girl', 'm:insect boy'
 , 'f:kappa', 'm:kappa'
 , 'f:lizard girl', 'm:lizard guy'
 , 'f:mermaid', 'fmermaid', 'm:merman', 'fishman'
-, 'm:minotaur', 'minotaur'
+, 'm:minotaur', 'minotaur'  // male only
 , 'f:monoeye', 'm:monoeye'
 , 'f:monster girl', 'monstergirl', 'm:monster', 'monster'
 , 'f:mouse girl', 'm:mouse boy'
@@ -228,17 +228,17 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:orc', 'forc', 'm:orc', 'morc'
 , 'f:pig girl', 'piggirl', 'm:pig man', 'pigman'
 , 'f:plant girl', 'plantgirl', 'm:plant boy', 'plantboy'
-, 'f:raccoon girl', 'raccoon boy'
+, 'f:raccoon girl', 'm:raccoon boy'
 , 'f:robot', 'm:robot'
 , 'f:shark girl', 'm:shark boy'
 , 'f:sheep girl', 'm:sheep boy'
 , 'f:slime girl', 'goo girl', 'm:slime boy', 'goo boy'
 , 'f:snake girl', 'm:snake boy'
-, 'f:spider girl', 'spidergirl'
-, 'f:squid girl', 'squidgirl'
+, 'f:spider girl', 'spidergirl'  // no male version yet
+, 'f:squid girl', 'squidgirl'  // no male version yet
 , 'f:vampire', 'm:vampie'
 , 'f:wolf girl', 'wolfgirl', 'm:wolf boy', 'wolfboy'
-, 'yukkuri'  // must be tagged always in misc?
+, 'yukkuri'  // genderless, always in misc
 , 'f:zombie', 'm:zombie'
 // animal
 , 'f:animal on animal', 'm:animal on animal', 'animal on animal'
@@ -274,7 +274,7 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:rabbit', 'bunny', 'm:rabbit', 'm:bunny'
 , 'f:raptile', 'frep', 'm:reptile', 'mrep'
 , 'f:rhinoceros', 'm:rhinoceros'
-, 'f:sheep', 'fsheep', 'm:sheep', 'msheep'  // wiki only female
+, 'f:sheep', 'fsheep', 'm:sheep', 'msheep'  // missing m:ram maybe?
 , 'f:shark', 'm:shark'
 , 'f:slug', 'fslug', 'm:slug', 'mslug'
 , 'f:snake', 'fsnake', 'm:snake', 'msnake'
@@ -344,7 +344,7 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:heterochromia', 'm:heterochromia'
 , 'f:unusual pupils', 'm:unusual pupils'
 // nose
-, 'f:nose fuck', 'm:nose fuck'
+, 'f:nose fuck'  // no male version yet
 , 'f:nose hook', 'm:nose hook'
 // mouth
 , 'f:ball sucking', 'fballsucking', 'm:ball sucking', 'mballsucking'
@@ -382,20 +382,20 @@ find this file, see <http://www.gnu.org/licenses/>.
 // breasts
 , 'f:big areolae', 'm:big areolae'
 , 'f:big breasts', 'm:big breasts'
-, 'f:breast feeding', 'fbreastfeed', 'm:breast feeding', 'mbreastfeed'  // wiki only male
+, 'f:breast feeding', 'fbreastfeed', 'm:breast feeding', 'mbreastfeed'
 , 'f:huge breasts', 'fhuge breasts'
 , 'f:lactation', 'm:lactation'
 , 'f:milking', 'fmilking'  // male links to handjob
 , 'f:multiple paizuri'  // no male version yet
 , 'f:oppai loli'  // female only
-, 'f:paizuri', 'fpai', 'm:paizuri', 'mpai'  // wiki only female
+, 'f:paizuri', 'fpai', 'm:paizuri', 'mpai'
 , 'f:small breasts', 'small breats'
 // nipples
 , 'f:big nipples', 'fbignipple', 'm:big nipples', 'mbignipple'
 , 'f:dark nipples', 'm:dark nipples'
 , 'f:dicknipples', 'm:dicknipples'
 , 'f:inverted nipples', 'm:inverted nipples'
-, 'f:multiple nipples', 'm:mulitple nipples'
+, 'f:multiple nipples'  // no male verion yet
 , 'f:nipple birth', 'fniiplebirth', 'm:nipple birth', 'mnipplebirth'
 , 'f:nipple fuck'  // no male version yet
 // torso
@@ -469,7 +469,7 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:bodysuit', 'fbodysuit', 'm:bodysuit', 'mbodysuit'
 , 'f:bride', 'm:bride'
 , 'f:business suit', 'm:business suit'
-, 'f:butler', 'fbutler', 'm:butler', 'mbutler'  // wiki only female
+, 'f:butler', 'fbutler', 'm:butler', 'mbutler'
 , 'f:cashier', 'facsh', 'm:cashier', 'mcash'
 , 'f:chastity belt', 'fcb', 'm:chastity belt', 'mcb'
 , 'f:cheerleader', 'fcheer', 'm:cheerleader', 'mcheer'
@@ -647,7 +647,7 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:teacher', 'fteacher', 'm:teacher', 'mteacher'
 , 'f:tomboy', 'tomboy', 'm:tomgirl', 'tomgirl'
 , 'f:tutor', 'ftutor', 'm:tutor', 'mtutor'
-, 'f:widow', 'm:widower'  // m:widower does not exist!
+, 'f:widow', 'm:widower'
 , 'f:yandere', 'fyandere', 'm:yandere', 'myandere'
 , 'f:yuri', 'm:yaoi'
 // infidelity
