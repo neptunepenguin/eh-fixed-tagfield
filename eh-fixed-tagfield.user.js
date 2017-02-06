@@ -5,7 +5,7 @@
 // @include     http://e-hentai.org/g/*
 // @include     https://e-hentai.org/g/*
 // @include     https://exhentai.org/g/*
-// @version     0.2
+// @version     0.3
 // @grant       none
 // ==/UserScript==
 /*
@@ -68,15 +68,32 @@ find this file, see <http://www.gnu.org/licenses/>.
 "use strict";
 
 (function () {
-    // positioning of the new element
+    // positioning of the new elements
     var div = document.createElement('div');
-    var div_style = 'opacity:0.7;position:fixed;z-index:100;top:0;right:0;';
+    var div_style = 'opacity:0.79;position:fixed;z-index:100;top:0;right:0;';
     div.style = div_style;
     var input = document.getElementById('newtagfield').cloneNode(true);
+    if (null == input) {  // sanity check
+        console.log('you cannot tag right now, sorry');
+        return;
+    }
     input.autocomplete = 'off';  // we have our own
     input.id = 'eh-fixed-tagfield-input';
     div.appendChild(input);
     document.body.appendChild(div);
+    // this is an element meant to be cloned and cloned over
+    var dialog = document.createElement('div');
+    var dialog_style = 'opacity:0.79;position:fixed;background-color:#669;';
+    dialog_style += 'top:50%;left:50%;transform:translate(-50%,-50%);';
+    dialog_style += 'padding:20px;border-radius:3px;border:2px solid white;';
+    dialog.style = dialog_style;
+    dialog.style.zIndex = '110';  // just in case
+    dialog.style.display = 'none';
+    var dialog_id = 'eh-fixed-tagfield-dialog';
+    dialog.id = dialog_id;
+    document.body.appendChild(dialog);
+    // performs the wiki search
+    var wk = 'https://ehwiki.org/index.php?title=Special:Search&go=Go&search=';
     // this allows for a TAB to be used to change focus to our new input field
     window.addEventListener('keydown', function(e) {
         if (9 == e.keyCode) { // TAB
@@ -86,7 +103,40 @@ find this file, see <http://www.gnu.org/licenses/>.
         }
     });
     input.addEventListener('keyup', input_bindings);
-    // TODO add tagging warning
+
+    // animated the tag completion, this is a hack if thinks take too long it
+    // will fail to display the correct tag field
+    function animate_field(tag) {
+        // we do *everything* in the timeouts to not mess garbage collection
+        window.setTimeout(function() {
+            var left = document.createTextNode('You have read the wiki for ');
+            var right = document.createTextNode(' right?');
+            var middle_text = tag.replace(/^.*:/, '');
+            var middle = document.createTextNode(middle_text);
+            var anchor = document.createElement('a');
+            anchor.href = wk + middle_text
+            anchor.appendChild(middle);
+            var text = document.createElement('h1');
+            text.appendChild(left);
+            text.appendChild(anchor);
+            text.appendChild(right);
+            var tag_field = document.getElementById('taglist');
+            if (null == tag_field)
+                return;
+            var central = tag_field.cloneNode(true);
+            central.style.pointerEvents = 'none';
+            central.id = 'eh-fixed-tagfield-central';
+            var clone = dialog.cloneNode(false);
+            clone.appendChild(text);
+            clone.appendChild(central);
+            clone.style.display = 'block';
+            clone.id = 'yay';
+            document.body.appendChild(clone);
+            window.setTimeout(function() {
+                clone.parentNode.removeChild(clone);
+            }, 2000);
+        }, 600);  // hopefully EH has updated itself
+    }
 
     // stores a list of all possible autocompletes
     var ac_list = [];
@@ -101,10 +151,13 @@ find this file, see <http://www.gnu.org/licenses/>.
             /* Uses the EH function to perform the API call that tags the
              * gallery, the call already updates the tag pane.  The issue may
              * be that it is a dependency on EH code. */
-            send_vote(input.value, 1);
-            input.value = '';
-            ac_list = [];
-            e.preventDefault();
+            if ('' != input.value) {
+                send_vote(input.value, 1);
+                animate_field(input.value);
+                input.value = '';
+                ac_list = [];
+                e.preventDefault();
+            }
         } else {
             // we are not tabbing anymore, so clear the list of matches
             ac_list = [];
@@ -124,6 +177,8 @@ find this file, see <http://www.gnu.org/licenses/>.
         var clean = text.toLowerCase().replace(/[;',."-+=]/, ':');
         var fil = function (f) { return 0 == f.indexOf(clean) };
         ac_list = ac_fetish.filter(fil);
+        // gives a behaviour more likely to be expected by the user
+        ac_list.sort();
         // place the current text at the bottom of the stack so we return to
         // the original state when the full list is poped
         ac_list.unshift(text);
@@ -167,20 +222,17 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:invisible', 'finvis', 'm:invisible', 'minvis'
 , 'f:multiple arms', 'm:multiple arms'
 , 'f:multiple breasts', 'multiboob'  // no male version yet
-, 'f:multiple nipples', 'm:multiple nipples'
 , 'f:multiple penises', 'multidick', 'm:multiple penises'
 , 'f:multiple vaginas'  // no male version yet
 , 'f:muscle', 'fmus', 'm:muscle', 'mmus'
-, 'f:muscle growth', 'm:muscle growth'
 , 'f:pregnant', 'fpreg', 'm:pregnant', 'mpreg'
-, 'f:stretching', 'fstretch', 'm:stretching'  // missing mstretch
+, 'f:stretching', 'fstretch', 'm:stretching', 'mstretch'
 , 'f:tailjob', 'm:tailjob'
 , 'f:wings', 'fwings', 'm:wings', 'mwings'
 // change
 , 'f:absorption', 'fabsorb', 'm:absorption', 'mabsorb'
 , 'f:ass expansion', 'm:ass expansion'
 , 'f:balls expansions', 'm:balls expansion', 'ball expansion'
-, 'f:body swap', 'fbodyswap', 'm:body swap', 'mbody swap', 'body swap'
 , 'f:breast expansion', 'm:breast expansion'
 , 'f:breast reduction'  // no male version yet
 , 'f:clit growth', 'clit grow'  // no male version yet
@@ -210,7 +262,7 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:elf', 'felf', 'm:elf', 'melf'
 , 'f:fairy', 'ffairy', 'm:fairy', 'mfairy'
 , 'f:fox girl', 'foxgirl', 'm:fox boy', 'foxboy'
-, 'f:furry', 'ffurry', 'm:furry', 'm:furry'
+, 'f:furry', 'ffurry', 'm:furry', 'mfurry'
 , 'f:ghost', 'fghost', 'm:ghost', 'mghost'
 , 'f:goblin', 'm:goblin'
 , 'f:harpy', 'fharpy', 'm:harpy', 'mharpy'
@@ -246,7 +298,7 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:bear', 'm:bear'
 , 'f:camel', 'm:camel'
 , 'f:cat', 'm:cat'
-, 'f:cow', 'm:bull', 'mcow'  // missing fcow
+, 'f:cow', 'fcow', 'm:bull', 'mcow'
 , 'f:crab', 'fcrab', 'm:crab', 'mcrab'
 , 'f:dinosaur', 'fdino', 'm:dinosaur', 'mdino'
 , 'f:dog', 'fdog', 'm:dog', 'mdog'
@@ -270,20 +322,20 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:octopus', 'm:squid'
 , 'f:ostrich', 'm:ostrich'
 , 'f:panther', 'm:panther'
-, 'f:pig', 'm:pig', 'mpig'  // missing fpig
+, 'f:pig', 'fpig', 'm:pig', 'mpig'
 , 'f:rabbit', 'bunny', 'm:rabbit', 'm:bunny'
 , 'f:raptile', 'frep', 'm:reptile', 'mrep'
 , 'f:rhinoceros', 'm:rhinoceros'
-, 'f:sheep', 'fsheep', 'm:sheep', 'msheep'  // missing m:ram maybe?
+, 'f:sheep', 'fsheep', 'm:sheep', 'msheep'
 , 'f:shark', 'm:shark'
 , 'f:slug', 'fslug', 'm:slug', 'mslug'
 , 'f:snake', 'fsnake', 'm:snake', 'msnake'
 , 'f:spider', 'fspider', 'm:spider', 'mspider'
-, 'f:tiger', 'm:tiger', 'mtiger'  // missing ftiger
+, 'f:tiger', 'ftiger', 'm:tiger', 'mtiger'
 , 'f:turtle', 'fturtle', 'm:turtle', 'mturtle'
 , 'f:unicorn', 'm:unicorn'
 , 'f:whale', 'm:whale'
-, 'f:wolf', 'm:wolf', 'mwolf'  // missing fwolf
+, 'f:wolf', 'fwolf', 'm:wolf', 'mwolf'
 , 'f:worm', 'm:worm'
 , 'f:zebra', 'm:zebra'
 // activity with creatures
@@ -313,7 +365,6 @@ find this file, see <http://www.gnu.org/licenses/>.
 // weight
 , 'f:anorexic'  // no male version yet
 , 'f:bbw', 'bbw', 'm:bbm', 'bbm'
-, 'f:weight gain', 'm:weight gain'
 // head
 , 'f:ahegao', 'fahegao', 'm:ahegao', 'mahegao'
 , 'f:brain fuck', 'm:brain fuck'
@@ -326,7 +377,6 @@ find this file, see <http://www.gnu.org/licenses/>.
 // mind
 , 'f:body swap', 'fbodyswap', 'm:body swap', 'mbodyswap', 'body swap'
 , 'f:chloroform', 'fchloro', 'm:chloroform', 'mchloro'
-, 'f:corruption', 'fcorr', 'm:corruption', 'mcorr'
 , 'f:drugs', 'm:drugs'
 , 'f:drunk', 'fdrunk', 'm:drunk', 'mdrunk'
 , 'f:emotionless sex', 'femotion', 'm:emotionless sex', 'memotion'
@@ -339,7 +389,7 @@ find this file, see <http://www.gnu.org/licenses/>.
 // eyes
 , 'f:blindfold', 'm:blindfold'
 , 'f:dark sclera', 'm:dark sclera'
-, 'f:eye penetration', 'feyefuck', 'm:eye penetration'  // missing meyefuck
+, 'f:eye penetration', 'feyefuck', 'm:eye penetration', 'meyefuck'
 , 'f:first person perspective', 'm:first person perspective'
 , 'f:heterochromia', 'm:heterochromia'
 , 'f:unusual pupils', 'm:unusual pupils'
@@ -403,7 +453,6 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:stocmach deformation', 'm:stocmach deformation'
 // crotch
 , 'f:condom', 'fcondom', 'm:condom', 'mcondom'
-, 'f:crotch tattoo'  // no male version yet
 , 'f:hairy', 'm:hairy'
 , 'f:pubic stubble', 'm:pubic stubble'
 , 'f:urethra insertion', 'm:urethra insertion'
@@ -418,7 +467,7 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:horse cock', 'm:horse cock'
 , 'f:huge penis', 'm:huge penis'
 , 'f:penis birth', 'fpenisbirth', 'm:penis birth', 'mpenisbirth'
-, 'f:phimosis', 'fphimosis', 'm:phimosis'  // missing mphimosis
+, 'f:phimosis', 'fphimosis', 'm:phimosis', 'mphimosis'
 , 'f:prostate massage', 'm:prostate massage'
 , 'f:shemale', 'shemale'  // female only
 , 'f:smegma', 'fsmegma', 'm:smegma', 'msmegma'
@@ -477,7 +526,7 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:christmas', 'fchrist', 'm:christmas', 'mchrist'
 , 'f:collar', 'm:collar'
 , 'f:corset', 'fcorset', 'm:corset', 'mcorset'
-, 'f:cosplaying', 'fcosplay', 'm:cosplaying'  // missing mcosplay
+, 'f:cosplaying', 'fcosplay', 'm:cosplaying', 'mcosplay'
 , 'f:crossdressing', 'fcross', 'm:crossdressing', 'mcross'
 , 'f:diaper', 'm:diaper'
 , 'f:dougi', 'fdougi', 'm:dougi', 'mdougi'
@@ -550,10 +599,10 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:speculum', 'fspec', 'm:speculum', 'mspec'
 , 'f:strap-on'  // no male version yet
 , 'f:syringe', 'fsyringe', 'm:syringe', 'msyringe'
-, 'f:tube', 'ftube', 'm:tube'  // missing mtube
+, 'f:tube', 'ftube', 'm:tube', 'mtube'
 , 'f:vacbed', 'm:vacbed'
 , 'f:whip', 'fwhip', 'm:whip', 'mwhip'
-, 'f:wooden horse', 'fwooden', 'm:wooden horse'  // missing mwooden
+, 'f:wooden horse', 'fwooden', 'm:wooden horse', 'mwooden'
 , 'f:wormhole', 'fwormhole', 'm:wormhole', 'mwormhole'
 , 'f:x-ray', 'fxray', 'm:x-ray', 'mxray'
 // fluids
@@ -580,7 +629,7 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:shibari', 'fshibari', 'm:shibari', 'mshibari'
 , 'f:slave', 'fslave', 'm:slave', 'mslave'
 , 'f:stuck in wall', 'fstuck', 'm:stuck in wall', 'mstuck'
-, 'f:tickling', 'ftickle', 'm:tickling'  // missing mtickle
+, 'f:tickling', 'ftickle', 'm:tickling', 'mtickle'
 , 'time stop'  // always in misc
 // violence
 , 'f:abortion', 'fabort', 'm:abortion', 'mabort'
@@ -604,7 +653,7 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:table masturbation', 'm:table masturbation'
 // disability
 , 'f:amputee', 'famp', 'm:amputee', 'mamp'
-, 'f:blind', 'fblind', 'm:blind'  // missing mblind
+, 'f:blind', 'fblind', 'm:blind', 'mblind'
 , 'f:handicapped'  // no male version yet
 , 'f:mute'  // no male version yet
 // privacy
@@ -691,12 +740,74 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'already uploaded', 'compilation', 'replaced'
 , 'forbidden content', 'realporn', 'watermarked'
 , 'incomplete', 'missing cover', 'out of order', 'sample', 'scanmark'
-// TODO
 // examles of tags that can be added: parodies, characters and artists/circles
 , 'p:my little pony friendship is magic'
+, 'c:applejack', 'c:fluttershy', 'c:pinkie pie'
+, 'c:rainbow dash', 'c:rarity', 'c:twilight sparkle'
+, 'c:princess celestia', 'c:pricess luna', 'c:spike'
+, 'c:maud pie', 'c:shining armor', 'c:princess cadance'
+, 'c:apple bloom', 'c:scootaloo', 'c:sweetie belle'
+, 'c:queen chrysalis', 'c:derpy hooves', 'c:trixie'
 , 'p:cardcaptor sakura'
-];
-
+, 'c:sakura kinomot', 'c:syaoran li', 'c:tomoyo daidouji'
+, 'c:touya kinomoto', 'c:yukito tsukishiro', 'c:eriol hiiragizawa'
+, 'p:love hina'
+, 'c:motoko aoyama', 'c:naru narusegawa', 'c:shinobu maehara'
+, 'c:mitsune konno', 'c:mutsumi otohime', 'c:kaolla su'
+, 'c:keitaro urashima'
+, 'p:ah my goddess'
+, 'c:belldandy', 'c:skuld', 'c:urd', 'c:keiichi morisato'
+, 'c:peorth', 'c:chihiro fujimi'
+, 'p:rurouni kenshin'
+, 'c:kaoru kamiya', 'c:misao makimachi', 'c:sanjo tsubame'
+, 'c:kenshin himura', 'c:sanosuke sagara', 'c:katamari honjou'
+, 'p:chobits'
+, 'c:chii', 'c:sumomo', 'c:yumi omura', 'c:takako shimizu'
+, 'c:hideki motosuwa'
+, 'p:neon genesis evangelion'
+, 'c:rei ayanami', 'c:misato katsuragi', 'c:asuka langley soryu'
+, 'c:ritsuko akagi', 'c:maya ibuki', 'c:gendo ikari'
+, 'c:shinji ikari', 'c:kaworu nagisa', 'c:mari illustrious makinami'
+, 'p:mahou shoujo lyrical nanoha'
+, 'c:nanoha takamachi', 'c:fate testarossa', 'c:chrono harlaown'
+, 'c:vivio takamachi', 'c:hayate yagami', 'c:yuuno scrya'
+// artists/circles
+, 'a:aichi shiho', 'a:bennys', 'a:chinzurena', 'a:dhibi', 'a:hanamaki kaeru'
+, 'a:inaba cozy', 'c:inochi wazuka', 'a:mario', 'a:nanamatsu kenji'
+, 'a:nemunemu', 'a:tsukuru', 'a:dynamite moca', 'a:katou chakichi'
+, 'a:kashimada shiki', 'a:munomerikun', 'a:po-ju', 'a:mtno', 'a:kuromame'
+, 'a:locon', 'a:neko maru rentarou', 'a:kitsune choukan', 'a:naokichi.'
+, 'a:shimaji', 'a:kagechin', 'a:macop', 'a:uchoten', 'a:palco nagashima'
+, 'a:amatake akewo', 'a:himenosu notari', 'a:collagen', 'a:amu', 'a:omecho'
+, 'a:mogiki hayami', 'a:binto', 'a:shinozaki rei', 'a:katou yuuhi'
+, 'a:musashino sekai', 'a:fuusen club', 'a:sexyturkey', 'a:chimosaku'
+, 'a:tokimachi eisei', 'a:asaga aoi', 'a:asanagi', 'a:aian', 'a:takatsu'
+, 'a:gujira', 'a:nagi ichi', 'a:piririnegi', 'a:clover', 'a:shiroo'
+, 'a:kokuyuugan', 'a:jajala', 'a:kanimaru', 'a:makita aoi', 'a:katou jun'
+, 'a:makuro', 'a:kanabayashi takai', 'a:rebis', 'a:ere 2 earo', 'a:akai mato'
+, 'a:sakai ringo', 'a:kanmirenjaku sanpei', 'a:nekoen', 'a:ogami wolf'
+, 'a:izumi yayoi', 'a:urakuso', 'a:mame', 'a:takase yuu', 'a:tonikaku'
+, 'a:fk696', 'a:chiku', 'a:musashi daichi', 'a:the amanoja9', 'a:nostradamuo'
+, 'a:udk', 'a:saikawa yusa', 'a:scotch', 'a:kurenai yuuji'
+, 'a:suemitsu dicca', 'a:dori rumoi', 'a:ziz', 'a:ryokutya', 'a:coin rand'
+, 'a:kurosaki bunta', 'a:hakuyagen', 'a:aogiri penta', 'a:kuroshi ringo'
+, 'a:kakugari kyoudai', 'a:hiiragi masaki', 'a:kotoko', 'a:hayashi'
+, 'a:mizuki key', 'a:yanagawa rio', 'a:aya', 'a:marui maru', 'a:sugar milk'
+, 'g:cannabis', 'g:pish lover', 'g:seki sabato', 'g:b kaiman'
+, 'g:soundvillage', 'g:granada sky', 'g:null mayu', 'g:temparing'
+, 'g:magenta rose', 'g:fatalpulse', 'g:shotaian', 'g:berugamoto'
+, 'g:rkaffy', 'g:yuunagi no senryokugai butai', 'g:zenra qq'
+, 'g:yadokugaeru', 'g:oshiruko kan', 'g:hi-per pinch', 'g:tamago no kara'
+, 'g:senya sabou', 'g:ash wing', 'g:datsuryoku kenkyuukai', 'g:dryr'
+, 'g:daiichi yutakasou', 'g:game dome', 'g:mercator zuhou', 'g:abgrund'
+, 'g:futararun', 'g:mizuiro zenmai', 'g:mizu', 'g:chijoku an'
+, 'g:pantwo', 'g:arsenothelus', 'g:sweettaboo', 'g:free style'
+, 'g:mitegura', 'g:high-spirit', 'g:kudamono monogatari', 'g:niku ringo'
+, 'g:milk boy', 'g:hayashi puramoten'
+// the list works best for long and distinct names but badly for very similar
+// names, e.g. final fantasy or dragon quest series would be a pain to
+// autocomplete
+    ];
 })();
 
 // useful to tell us if something blew up
