@@ -86,6 +86,7 @@ find this file, see <http://www.gnu.org/licenses/>.
     var dialog_style = 'opacity:0.79;position:fixed;background-color:#669;';
     dialog_style += 'top:50%;left:50%;transform:translate(-50%,-50%);';
     dialog_style += 'padding:20px;border-radius:3px;border:2px solid white;';
+    dialog_style += 'text-align:center;font-size:10pt;';
     dialog.style = dialog_style;
     dialog.style.zIndex = '110';  // just in case
     dialog.style.display = 'none';
@@ -104,38 +105,84 @@ find this file, see <http://www.gnu.org/licenses/>.
     });
     input.addEventListener('keyup', input_bindings);
 
-    // animated the tag completion, this is a hack if thinks take too long it
-    // will fail to display the correct tag field
-    function animate_field(tag) {
-        // we do *everything* in the timeouts to not mess garbage collection
+    /* Shows a dialog for two seconds.  The same dialog is used for a tag
+     * through the tag field and for the undo button, the difference is that
+     * the undo button itself creates a dialog without yet another undo button.
+     * One important thing here to think about is garbage collection: we will
+     * remove the entire dialog from the document but if we keep references to
+     * some of the elements (in global variables for example), these will not
+     * be garbage collected.  Be careful.  */
+    function show_taglist(header, footer) {
         window.setTimeout(function() {
-            var left = document.createTextNode('You have read the wiki for ');
-            var right = document.createTextNode(' right?');
-            var middle_text = tag.replace(/^.*:/, '');
-            var middle = document.createTextNode(middle_text);
-            var anchor = document.createElement('a');
-            anchor.href = wk + middle_text
-            anchor.appendChild(middle);
-            var text = document.createElement('h1');
-            text.appendChild(left);
-            text.appendChild(anchor);
-            text.appendChild(right);
             var tag_field = document.getElementById('taglist');
+            // something is fucked, bail
             if (null == tag_field)
                 return;
             var central = tag_field.cloneNode(true);
+            // this is the only safe way to clear text decoration
+            var cur_tags = central.getElementsByTagName('a');
+            Array.prototype.forEach.call(cur_tags, function (a) {
+                a.style.textDecoration = 'none';
+            });
             central.style.pointerEvents = 'none';
             central.id = 'eh-fixed-tagfield-central';
             var clone = dialog.cloneNode(false);
-            clone.appendChild(text);
+            if (null != header)
+                clone.appendChild(header);
             clone.appendChild(central);
+            if (null != footer)
+                clone.appendChild(footer);
+            clone.id = 'eh-fixed-tagfield-clone';
             clone.style.display = 'block';
-            clone.id = 'yay';
             document.body.appendChild(clone);
             window.setTimeout(function() {
                 clone.parentNode.removeChild(clone);
             }, 2000);
-        }, 600);  // hopefully EH has updated itself
+        }, 600);
+    }
+
+    /* What actually animates the tag field in the middle of the screen is
+     * show_taglist() but the tricky part of the undo button happens here.
+     * We build the header and footer and pass them to show_taglist(), now the
+     * footer is bound to an event where it will redo the voting for the same
+     * tag (or tags) and redisplay everything (but the footer itself) again.
+     * This makes for a nice undo button.
+     *
+     * Although all of this is still a hack, if EH takes too long to update the
+     * tags wrong things will be shown.  And, moreover, the undo button may
+     * send a POST before the original vote is processed if EH takes a very
+     * very long time.
+     *
+     * Also, send_vote() is a procedure from EH itself.  This makes things easy
+     * for us since we do not need to deal with the requests directly, on the
+     * other hand places a dependency on EH code.  */
+    function animate_field(tag) {
+        // send the request as soon as possible
+        send_vote(tag, 1);
+        // header
+        var left = document.createTextNode('You have read the wiki for ');
+        var right = document.createTextNode(' right?');
+        var middle_text = tag.replace(/^.*:/, '');
+        var middle = document.createTextNode(middle_text);
+        var anchor = document.createElement('a');
+        anchor.href = wk + middle_text;
+        anchor.target = '_blank';
+        anchor.style.textDecoration = 'underline';
+        anchor.appendChild(middle);
+        var header = document.createElement('h1');
+        header.appendChild(left);
+        header.appendChild(anchor);
+        header.appendChild(right);
+        var undo = document.createTextNode('UNDO!');
+        var footer = document.createElement('h2');
+        footer.appendChild(undo);
+        footer.style.cursor = 'pointer';
+        footer.addEventListener('click', function() {
+            send_vote(tag, -1);
+            // if you click too fast this may overlay for a second
+            show_taglist(header);
+        });
+        return show_taglist(header, footer);
     }
 
     // stores a list of all possible autocompletes
@@ -143,21 +190,30 @@ find this file, see <http://www.gnu.org/licenses/>.
 
     // performs the special effects of the new input
     function input_bindings(e) {
-        if (9 == e.keyCode) {  // TAB
+        // future proofing
+        var code = e.keyCode;
+        if (undefined == code)
+            code = e.key;
+        if (9 == code) {  // TAB
             // push the content through the autocomplete procedure
             e.target.value = autocomplete(e.target.value);
             e.preventDefault();
-        } else if (13 == e.keyCode) {  // RETURN
-            /* Uses the EH function to perform the API call that tags the
-             * gallery, the call already updates the tag pane.  The issue may
-             * be that it is a dependency on EH code. */
-            if ('' != input.value) {
-                send_vote(input.value, 1);
+        } else if (13 == code) {  // RETURN
+            // perform the API calls and animations
+            if ('' == input.value) {
+                show_taglist();
+            } else {
                 animate_field(input.value);
                 input.value = '';
                 ac_list = [];
                 e.preventDefault();
             }
+        } else if (33 == code) {  // PAGE UP
+            // this is nice to have (and does not interrupt tabbing)
+            window.scrollBy(0, 128 - window.innerHeight);
+        } else if (34 == code) {  // PAGE DOWN
+            // if your screen is smaller than 128 pixels you do not need this
+            window.scrollBy(0, window.innerHeight - 128);
         } else {
             // we are not tabbing anymore, so clear the list of matches
             ac_list = [];
@@ -243,7 +299,7 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:growth', 'fgrowth', 'm:growth', 'mgrowth'
 , 'f:moral degeneration', 'fmoral', 'm:moral degeneration', 'mmoral'
 , 'f:muscle growth', 'm:muscle growth'
-, 'f:nipple expansion'  // no male verion yet
+, 'f:nipple expansion'  // no male version yet
 , 'f:petrification', 'statue', 'm:petrification'
 , 'f:shrinking', 'm:shrinking'
 , 'f:transformation', 'ftrans', 'm:transformation', 'mtrans'
@@ -445,12 +501,12 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:dark nipples', 'm:dark nipples'
 , 'f:dicknipples', 'm:dicknipples'
 , 'f:inverted nipples', 'm:inverted nipples'
-, 'f:multiple nipples'  // no male verion yet
+, 'f:multiple nipples'  // no male version yet
 , 'f:nipple birth', 'fniiplebirth', 'm:nipple birth', 'mnipplebirth'
 , 'f:nipple fuck'  // no male version yet
 // torso
 , 'f:navel fuck', 'm:navel fuck'
-, 'f:stocmach deformation', 'm:stocmach deformation'
+, 'f:stomach deformation', 'm:stomach deformation'
 // crotch
 , 'f:condom', 'fcondom', 'm:condom', 'mcondom'
 , 'f:hairy', 'm:hairy'
@@ -622,7 +678,7 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:chikan', 'fchikan', 'm:chikan', 'mchikan'
 , 'f:femdom', 'femdom', 'm:josou seme', 'trapdom'
 , 'f:forniphilia', 'fforn', 'm:forniphilia', 'mforn'
-, 'f:humman cattle'  // no male version yet
+, 'f:human cattle'  // no male version yet
 , 'f:human pet', 'pergirl', 'm:human pet', 'petgirl'
 , 'f:orgasm denial', 'm:orgasm denial'
 , 'f:rape', 'frape', 'm:rape', 'mrape'
@@ -740,7 +796,7 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'already uploaded', 'compilation', 'replaced'
 , 'forbidden content', 'realporn', 'watermarked'
 , 'incomplete', 'missing cover', 'out of order', 'sample', 'scanmark'
-// examles of tags that can be added: parodies, characters and artists/circles
+// examples of tags that can be added: parodies, characters and artists/circles
 , 'p:my little pony friendship is magic'
 , 'c:applejack', 'c:fluttershy', 'c:pinkie pie'
 , 'c:rainbow dash', 'c:rarity', 'c:twilight sparkle'
@@ -788,7 +844,7 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'a:sakai ringo', 'a:kanmirenjaku sanpei', 'a:nekoen', 'a:ogami wolf'
 , 'a:izumi yayoi', 'a:urakuso', 'a:mame', 'a:takase yuu', 'a:tonikaku'
 , 'a:fk696', 'a:chiku', 'a:musashi daichi', 'a:the amanoja9', 'a:nostradamuo'
-, 'a:udk', 'a:saikawa yusa', 'a:scotch', 'a:kurenai yuuji'
+, 'a:udk', 'a:saikawa yusa', 'a:scotch', 'a:kurenai yuuji', 'a:obata yayoi'
 , 'a:suemitsu dicca', 'a:dori rumoi', 'a:ziz', 'a:ryokutya', 'a:coin rand'
 , 'a:kurosaki bunta', 'a:hakuyagen', 'a:aogiri penta', 'a:kuroshi ringo'
 , 'a:kakugari kyoudai', 'a:hiiragi masaki', 'a:kotoko', 'a:hayashi'
@@ -803,7 +859,7 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'g:futararun', 'g:mizuiro zenmai', 'g:mizu', 'g:chijoku an'
 , 'g:pantwo', 'g:arsenothelus', 'g:sweettaboo', 'g:free style'
 , 'g:mitegura', 'g:high-spirit', 'g:kudamono monogatari', 'g:niku ringo'
-, 'g:milk boy', 'g:hayashi puramoten'
+, 'g:milk boy', 'g:hayashi puramoten', 'g:yayoi fantasy zone'
 // the list works best for long and distinct names but badly for very similar
 // names, e.g. final fantasy or dragon quest series would be a pain to
 // autocomplete
