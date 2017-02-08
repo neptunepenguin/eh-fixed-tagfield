@@ -25,7 +25,7 @@ prove to be a strange behaviour to some.
 
 ![Example usage][1]
 
-[1]: https://raw.githubusercontent.com/neptunepenguin/eh-fixed-tag-field/master/screencast.gif
+[1]: https://raw.githubusercontent.com/neptunepenguin/eh-fixed-tagfield/master/screencast.gif
 
 ### TODO
 
