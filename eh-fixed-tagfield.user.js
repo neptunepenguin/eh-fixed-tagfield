@@ -5,7 +5,7 @@
 // @include     http://e-hentai.org/g/*
 // @include     https://e-hentai.org/g/*
 // @include     https://exhentai.org/g/*
-// @version     0.3
+// @version     0.5
 // @grant       none
 // ==/UserScript==
 /*
@@ -341,9 +341,11 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:shark girl', 'm:shark boy'
 , 'f:sheep girl', 'm:sheep boy'
 , 'f:slime girl', 'goo girl', 'm:slime boy', 'goo boy'
+, 'f:snail girl'  // no male version yet
 , 'f:snake girl', 'm:snake boy'
 , 'f:spider girl', 'spidergirl'  // no male version yet
-, 'f:squid girl', 'squidgirl'  // no male version yet
+, 'f:squid girl', 'squidgirl', 'm:squid boy', 'squidboy'
+, 'f:squirrel girl', 'm:squirrel boy'
 , 'f:vampire', 'm:vampie'
 , 'f:wolf girl', 'wolfgirl', 'm:wolf boy', 'wolfboy'
 , 'yukkuri'  // genderless, always in misc
@@ -510,6 +512,7 @@ find this file, see <http://www.gnu.org/licenses/>.
 // crotch
 , 'f:condom', 'fcondom', 'm:condom', 'mcondom'
 , 'f:hairy', 'm:hairy'
+, 'f:pantyjob', 'm:pantyjob'
 , 'f:pubic stubble', 'm:pubic stubble'
 , 'f:urethra insertion', 'm:urethra insertion'
 // penile
@@ -563,6 +566,7 @@ find this file, see <http://www.gnu.org/licenses/>.
 // feet
 , 'f:foot insertion', 'm:foot insertion'
 , 'f:footjob', 'm:footjob'
+, 'f:sockjob', 'm:sockjob'
 // costume
 , 'f:apron', 'fapron', 'm:apron', 'mapron'
 , 'f:bandages', 'mbandage', 'm:bandages', 'fbandage'
@@ -580,6 +584,7 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:cheerleader', 'fcheer', 'm:cheerleader', 'mcheer'
 , 'f:chinese dress', 'm:chinese dress'
 , 'f:christmas', 'fchrist', 'm:christmas', 'mchrist'
+, 'f:clown', 'm:clown'
 , 'f:collar', 'm:collar'
 , 'f:corset', 'fcorset', 'm:corset', 'mcorset'
 , 'f:cosplaying', 'fcosplay', 'm:cosplaying', 'mcosplay'
@@ -617,7 +622,6 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:nun', 'fnun', 'm:nun', 'mnun'
 , 'f:nurse', 'fnurse', 'm:nurse', 'mnurse'
 , 'f:pantyhose', 'fpantyh', 'm:pantyhose', 'mpantyh'
-, 'f:pantyjob', 'm:pantyjob'
 , 'f:pasties', 'm:pasties'
 , 'f:piercing', 'fpiercing', 'm:piercing', 'mpiercing'
 , 'f:policewoman', 'm:policeman'
@@ -630,6 +634,7 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:scrotal lingerie', 'm:scrotal lingerie'
 , 'f:shimapan', 'fstriped panties', 'm:shimapan', 'mstriped panties'
 , 'f:stewardess', 'fstewardess', 'm:stewardess', 'mstewardess'
+, 'm:steward'  // no female version yet
 , 'f:stockings', 'fstockings', 'm:stockings', 'mstockings'
 , 'f:swimsuit', 'fswimsuit', 'm:swimsuit', 'mswimsuit'
 , 'f:sundress', 'fsundress', 'm:sundress', 'msundress'
@@ -829,7 +834,7 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'c:vivio takamachi', 'c:hayate yagami', 'c:yuuno scrya'
 // artists/circles
 , 'a:aichi shiho', 'a:bennys', 'a:chinzurena', 'a:dhibi', 'a:hanamaki kaeru'
-, 'a:inaba cozy', 'c:inochi wazuka', 'a:mario', 'a:nanamatsu kenji'
+, 'a:inaba cozy', 'a:inochi wazuka', 'a:mario', 'a:nanamatsu kenji'
 , 'a:nemunemu', 'a:tsukuru', 'a:dynamite moca', 'a:katou chakichi'
 , 'a:kashimada shiki', 'a:munomerikun', 'a:po-ju', 'a:mtno', 'a:kuromame'
 , 'a:locon', 'a:neko maru rentarou', 'a:kitsune choukan', 'a:naokichi.'

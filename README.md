@@ -23,7 +23,7 @@ does not carry over the case.  This should not be visible since EH tags are all
 lowercase and most people would never input upper case letters, yet it may
 prove to be a strange behaviour to some.
 
-![Example uage][1]
+![Example usage][1]
 
 [1]: https://raw.githubusercontent.com/neptunepenguin/eh-fixed-tag-field/master/screencast.gif
 
