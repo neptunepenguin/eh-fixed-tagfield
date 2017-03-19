@@ -572,6 +572,7 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'f:big areolae', 'm:big areolae'
 , 'f:big breasts', 'm:big breasts'
 , 'f:breast feeding', 'fbreastfeed', 'm:breast feeding', 'mbreastfeed'
+, 'f:gigantic breasts', 'm:gigantic breasts'
 , 'f:huge breasts', 'fhuge breasts'
 , 'f:lactation', 'm:lactation'
 , 'f:milking', 'fmilking'  // male links to handjob
