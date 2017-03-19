@@ -5,7 +5,7 @@
 // @include     http://e-hentai.org/g/*
 // @include     https://e-hentai.org/g/*
 // @include     https://exhentai.org/g/*
-// @version     0.5
+// @version     0.6
 // @grant       none
 // ==/UserScript==
 /*
@@ -181,8 +181,30 @@ find this file, see <http://www.gnu.org/licenses/>.
             send_vote(tag, -1);
             // if you click too fast this may overlay for a second
             show_taglist(header);
+            // try to return focus, may not work sometimes
+            input.focus();
         });
         return show_taglist(header, footer);
+    }
+
+    /* Performs the same animation as animate_field but for tags that have been
+     * obviously mistyped in the tag field.  It does *not* send the vote to EH
+     * and warns the user of the typo.
+     *
+     * Neither the autocomplete list or the input text inside the field shall
+     * be cleaned after this animation because it does not mingle in the state
+     * of the autocomple.  The user is just warned, he is then free to correct
+     * his typo and tag properly.  */
+    function animate_bad_tag(bad_tag) {
+        var left = document.createTextNode('Oooops, | ');
+        var right = document.createTextNode(" | ain't a valid tag.");
+        var middle = document.createTextNode(bad_tag);
+        var header = document.createElement('h1');
+        header.style.color = '#f33';
+        header.appendChild(left);
+        header.appendChild(middle);
+        header.appendChild(right);
+        return show_taglist(header);
     }
 
     // stores a list of all possible autocompletes
@@ -203,42 +225,100 @@ find this file, see <http://www.gnu.org/licenses/>.
             if ('' == input.value) {
                 show_taglist();
             } else {
-                animate_field(input.value);
-                input.value = '';
-                ac_list = [];
+                var tag_value = good_tag(input.value);
+                if (tag_value) {
+                    animate_field(tag_value);
+                    input.value = '';
+                    ac_list = [];
+                } else {
+                    animate_bad_tag(input.value);
+                }
                 e.preventDefault();
             }
-        } else if (33 == code) {  // PAGE UP
+        } else if (33 == code && !e.ctrlKey) {  // PAGE UP
             // this is nice to have (and does not interrupt tabbing)
             window.scrollBy(0, 128 - window.innerHeight);
-        } else if (34 == code) {  // PAGE DOWN
+        } else if (34 == code && !e.ctrlKey) {  // PAGE DOWN
             // if your screen is smaller than 128 pixels you do not need this
             window.scrollBy(0, window.innerHeight - 128);
+        } else if (35 == code) {  // END
+            // to the end of document
+            window.scrollTo(0, document.body.scrollHeight);
+        } else if (36 == code) {  // HOME
+            // to the top
+            window.scrollTo(0, 0);
         } else {
             // we are not tabbing anymore, so clear the list of matches
             ac_list = [];
         }
     }
 
+    /* helper for matching against the autocomplete list,
+     * prevents code duplication  */
+    function make_match_clean(text) {
+        // the colon (':') is needed here,
+        // prevents us from changing a later occurrence of the characters
+        return text.toLowerCase().replace(/[:;',."-+=]/, ':');
+    }
+
     /* Performs a crude autocomplete, currently works for a single word only.
      * In the future we should bind another procedure that will separate the
      * input into words (separated by commas), and match only the last one.
-     * */
+     */
     function autocomplete(text) {
         if ('' == text)  // nothing to do
             return '';
         if (0 < ac_list.length)  // we still have matches give another one
             return ac_list.pop();
         // otherwise we will need to actually perform the matches
-        var clean = text.toLowerCase().replace(/[;',."-+=]/, ':');
-        var fil = function (f) { return 0 == f.indexOf(clean) };
+        var clean = make_match_clean(text);
+        var fil = function (f) { return 0 === f.indexOf(clean) };
         ac_list = ac_fetish.filter(fil);
-        // gives a behaviour more likely to be expected by the user
-        ac_list.sort();
+        // gives a behaviour more likely to be expected by the user,
+        // since we walk the list in reverse
+        ac_list.sort(function (l, r) {
+            return (l > r) ? -1 : ((l < r) ? 1 : 0);
+        });
         // place the current text at the bottom of the stack so we return to
         // the original state when the full list is poped
         ac_list.unshift(text);
         return ac_list.pop();
+    }
+
+    /* Prevents typos from being submitted to EH.  Matches a submitted tag
+     * against the autocomplete list for the fetish and misc: namespaces.
+     * Character and parody namespaces unfortunately cannot be checked in this
+     * way because the list would end too big.
+     *
+     * To add a new tag into the misc: namespace you need to prefix it with the
+     * string "misc:".  The prefix will be removed and the tag will not be
+     * checked against the autocomplete list.
+     *
+     * Also, if there are  commas present in the input then there is nothing we
+     * can do about it.  If we meddle with the commas we will not be able to
+     * support several tags to be sent at once, which is supported by the main
+     * tag field.  */
+    function good_tag(text) {
+        if (text.match(/^misc:/))
+            return text.replace('misc:', '');
+        if (text.match(','))  // support for multiple tags
+            return text;
+        if (text.match(/^r:/) || text.match(/^reclass:/))
+            return text;
+        if (text.match(/^p:/) || text.match(/^parody:/))
+            return text;
+        if (text.match(/^c:/) || text.match(/^character:/))
+            return text;
+        if (text.match(/^g:/) || text.match(/^group:/))
+            return text;
+        if (text.match(/^a:/) || text.match(/^artist:/))
+            return text;
+        // otherwise the tag *must* be on the list below
+        var clean = make_match_clean(text);
+        var fetishes = ac_fetish.filter(function (f) { return clean === f; });
+        if (0 < fetishes.length)
+            return clean;
+        return null;
     }
 
     /*
@@ -423,6 +503,7 @@ find this file, see <http://www.gnu.org/licenses/>.
 // weight
 , 'f:anorexic'  // no male version yet
 , 'f:bbw', 'bbw', 'm:bbm', 'bbm'
+, 'f:ssbbw', 'm:ssbbm'
 // head
 , 'f:ahegao', 'fahegao', 'm:ahegao', 'mahegao'
 , 'f:brain fuck', 'm:brain fuck'
@@ -810,7 +891,7 @@ find this file, see <http://www.gnu.org/licenses/>.
 , 'c:apple bloom', 'c:scootaloo', 'c:sweetie belle'
 , 'c:queen chrysalis', 'c:derpy hooves', 'c:trixie'
 , 'p:cardcaptor sakura'
-, 'c:sakura kinomot', 'c:syaoran li', 'c:tomoyo daidouji'
+, 'c:sakura kinomoto', 'c:syaoran li', 'c:tomoyo daidouji'
 , 'c:touya kinomoto', 'c:yukito tsukishiro', 'c:eriol hiiragizawa'
 , 'p:love hina'
 , 'c:motoko aoyama', 'c:naru narusegawa', 'c:shinobu maehara'
